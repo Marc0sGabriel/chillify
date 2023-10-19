@@ -1,7 +1,9 @@
+import { HeaderComponent } from './interface/components/Header';
+
 export default function Home() {
   return (
     <main>
-      <h1>Hello world</h1>
+      <HeaderComponent />
     </main>
   );
 }
