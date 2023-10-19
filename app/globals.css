@@ -9,4 +9,7 @@
 body {
   color: #f1f1f1;
   background: var(--background-color);
+  background-image: url('../public/images/hall.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
