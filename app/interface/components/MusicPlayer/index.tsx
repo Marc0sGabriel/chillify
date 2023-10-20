@@ -20,7 +20,7 @@ export function MusicPlayerComponent() {
   return (
     <>
       <span className="text-gray-500 left-10 top-24 absolute flex items-center gap-2 w-fit ">
-        <BsBroadcast /> Playing now
+        <BsBroadcast className="fill-purple-600" /> Playing now
       </span>
       <aside className="relative my-0 mx-auto bg-gray-500 flex rounded-xl p-3 max-w-md bg-opacity-30 backdrop-blur-sm">
         <div className="w-40 h-40">
@@ -28,7 +28,6 @@ export function MusicPlayerComponent() {
             className="object-cover w-full h-full rounded-lg"
             width={96}
             height={144}
-            objectFit="cover"
             unoptimized
             src={
               'https://lofigirl.com/wp-content/uploads/elementor/thumbs/summer-boy-qc2031oy0tv0ndmc3vjny71vdjsvm8tdvfrah4drc0.png'
