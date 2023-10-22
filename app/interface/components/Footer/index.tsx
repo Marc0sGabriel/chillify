@@ -4,7 +4,7 @@ export function FooterComponent() {
   const yearNow = new Date().getFullYear().toString();
 
   return (
-    <footer className="w-fit mx-auto my-0">
+    <footer className="w-fit mx-auto my-0 mt-5">
       <section>
         <span className="flex items-center justify-center gap-2">
           Built with <SiTailwindcss /> <SiNextdotjs /> <SiReact /> and 🩵
