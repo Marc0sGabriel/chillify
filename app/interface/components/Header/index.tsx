@@ -1,9 +1,12 @@
 import { SiGithub, SiGmail, SiLinkedin } from 'react-icons/si';
+import { ProductivityComponent } from '../ProductivityActions';
 
 export function HeaderComponent() {
   return (
     <header className="flex justify-between p-10">
       <h1 className="font-bold text-4xl">Chillify</h1>
+
+      <ProductivityComponent />
 
       <nav className="flex items-center gap-4">
         <a
