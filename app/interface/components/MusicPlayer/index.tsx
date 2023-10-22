@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+
 import {
   BsPlayFill,
   BsPauseFill,
@@ -19,7 +20,8 @@ export function MusicPlayerComponent() {
       <span className="text-gray-500 left-10 top-24 absolute flex items-center gap-2 w-fit ">
         <BsBroadcast className="fill-purple-500" /> Playing now
       </span>
-      <aside className="relative my-0 mx-auto bg-gray-500 flex rounded-xl p-3 max-w-sm bg-opacity-30 backdrop-blur-sm">
+
+      <aside className="relative my-0 mx-auto bg-zinc-600 flex rounded-xl p-3 max-w-sm">
         <div className="w-40 h-28">
           <Image
             className="object-cover w-full h-full rounded-xl"
