@@ -7,32 +7,29 @@ import {
   BsPauseFill,
   BsFillSkipEndFill,
   BsSkipStartFill,
+  BsGripHorizontal,
   BsBroadcast,
 } from 'react-icons/bs';
 
 export function MusicPlayerComponent() {
-  const [playMusic, setPlayMusic] = useState(false);
-
-  function togglePlayPauseMusic() {
-    setPlayMusic(!playMusic);
-  }
+  const [playMusic, setPlayMusic] = useState(true);
 
   return (
     <>
       <span className="text-gray-500 left-10 top-24 absolute flex items-center gap-2 w-fit ">
-        <BsBroadcast className="fill-purple-600" /> Playing now
+        <BsBroadcast className="fill-purple-500" /> Playing now
       </span>
-      <aside className="relative my-0 mx-auto bg-gray-500 flex rounded-xl p-3 max-w-md bg-opacity-30 backdrop-blur-sm">
-        <div className="w-40 h-40">
+      <aside className="relative my-0 mx-auto bg-gray-500 flex rounded-xl p-3 max-w-sm bg-opacity-30 backdrop-blur-sm">
+        <div className="w-40 h-28">
           <Image
-            className="object-cover w-full h-full rounded-lg"
-            width={96}
-            height={144}
+            className="object-cover w-full h-full rounded-xl"
+            width={160}
+            height={112}
             unoptimized
             src={
               'https://lofigirl.com/wp-content/uploads/elementor/thumbs/summer-boy-qc2031oy0tv0ndmc3vjny71vdjsvm8tdvfrah4drc0.png'
             }
-            alt={''}
+            alt={'song album image'}
           />
         </div>
 
@@ -41,40 +38,37 @@ export function MusicPlayerComponent() {
           className="ml-3 w-full"
         >
           <header>
-            <h3 aria-label="music title" className="text-2xl font-semibold">
+            <BsGripHorizontal className="w-7 h-7 absolute right-4 cursor-grab" />
+
+            <h4 aria-label="music title" className="text-xl font-semibold">
               Always with me
-            </h3>
+            </h4>
 
             <div
-              className="my-2 font-mono text-gray-300"
+              className="my-1 font-mono text-gray-300"
               aria-label="artist name"
             >
               <small>Youmi Kimura</small>
             </div>
           </header>
 
-          <div
-            aria-label="music time left"
-            className="flex justify-between items-center mb-1 font-mono text-gray-300"
-          >
-            <small>00:25</small>
-            <small>3:45</small>
-          </div>
-
-          <div className="h-0.5 w-full bg-gray-400 rounded mb-5">
-            <div
-              aria-label="music progress bar"
-              className="h-0.5 w-1/4  bg-orange-400 rounded"
-            />
-          </div>
-
-          <ul className="flex items-center gap-5 w-fit mx-auto my-0">
+          <ul className="flex items-center gap-5 w-fit mt-4 mx-auto">
             <BsSkipStartFill className="h-7 w-7 cursor-pointer" />
-            <BsPlayFill
-              aria-label="button to play the song"
-              className="h-9 w-9 cursor-pointer"
-              onClick={() => togglePlayPauseMusic()}
-            />
+
+            {/* play and pause the song */}
+            {playMusic ? (
+              <BsPlayFill
+                aria-label="button to play the song"
+                className="h-9 w-9 cursor-pointer"
+                onClick={() => setPlayMusic(false)}
+              />
+            ) : (
+              <BsPauseFill
+                aria-label="button to pause the song"
+                className="h-9 w-9 cursor-pointer"
+                onClick={() => setPlayMusic(true)}
+              />
+            )}
 
             <BsFillSkipEndFill className="h-7 w-7 cursor-pointer" />
           </ul>
