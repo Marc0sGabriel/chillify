@@ -1,5 +1,4 @@
 import { MdOutlineWatchLater, MdOutlineStickyNote2 } from 'react-icons/md';
-import { PomodoroWidget } from '../PomodoroWidget';
 
 export function ProductivityComponent() {
   return (
@@ -8,10 +7,14 @@ export function ProductivityComponent() {
         className="w-5 h-5 hover:cursor-pointer"
         aria-label="button to create a task"
       />
-      <MdOutlineWatchLater
-        className="w-5 h-5 hover:cursor-pointer"
+
+      <button
+        className="tooltip tooltip-bottom hover:cursor-pointer"
+        data-tip="pomodoro"
         aria-label="button to create a pomodoro"
-      />
+      >
+        <MdOutlineWatchLater className="w-5 h-5" />
+      </button>
     </div>
   );
 }
