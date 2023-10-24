@@ -1,10 +1,10 @@
 'use client';
 
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { z } from 'zod';
 import { Tasks } from './Tasks';
 import { BsXOctagon, BsGripHorizontal, BsPlusLg } from 'react-icons/bs';
-import Draggable from 'react-draggable';
+import Draggable from '@/app/utils/dragElement';
 
 const taskSchema = z.object({
   getTaskValue: z
