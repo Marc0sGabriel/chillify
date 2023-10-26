@@ -8,7 +8,6 @@ import {
   BsPauseFill,
   BsFillSkipEndFill,
   BsSkipStartFill,
-  BsGripHorizontal,
   BsBroadcast,
 } from 'react-icons/bs';
 
@@ -16,12 +15,12 @@ export function MusicPlayerComponent() {
   const [playMusic, setPlayMusic] = useState(true);
 
   return (
-    <>
-      <span className="text-gray-500 left-10 top-24 absolute flex items-center gap-2 w-fit ">
+    <div className="w-full">
+      <span className="text-gray-500 left-10 top-24 absolute flex items-center gap-2 w-fit">
         <BsBroadcast className="fill-purple-500" /> Playing now
       </span>
 
-      <aside className="relative my-0 mx-auto bg-zinc-600 flex rounded-xl p-3 max-w-sm">
+      <aside className="relative top-[27rem] my-0 mx-auto bg-zinc-600 flex rounded-xl p-3 max-w-sm">
         <div className="w-40 h-28">
           <Image
             className="object-cover w-full h-full rounded-xl"
@@ -40,8 +39,6 @@ export function MusicPlayerComponent() {
           className="ml-3 w-full"
         >
           <header>
-            <BsGripHorizontal className="w-7 h-7 absolute right-4 cursor-grab" />
-
             <h4 aria-label="music title" className="text-xl font-semibold">
               Always with me
             </h4>
@@ -76,6 +73,6 @@ export function MusicPlayerComponent() {
           </ul>
         </section>
       </aside>
-    </>
+    </div>
   );
 }
