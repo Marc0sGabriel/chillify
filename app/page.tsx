@@ -1,5 +1,5 @@
 import { HeaderComponent } from './interface/components/Header';
-import { MusicPlayerComponent } from './interface/components/MusicPlayer';
+import { Player } from './interface/components/MusicPlayer/Player';
 import { ProductivityComponent } from './interface/components/ProductivityActions';
 
 export default function Home() {
@@ -7,7 +7,7 @@ export default function Home() {
     <main>
       <HeaderComponent />
       <ProductivityComponent />
-      <MusicPlayerComponent />
+      <Player />
     </main>
   );
 }
