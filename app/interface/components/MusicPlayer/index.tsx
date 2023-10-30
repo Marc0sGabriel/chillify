@@ -3,14 +3,9 @@
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import {
-  BsPlayFill,
-  BsPauseFill,
-  BsFillSkipEndFill,
-  BsSkipStartFill,
-  BsBroadcast,
-  BsFillVolumeUpFill,
-} from 'react-icons/bs';
+import { BsBroadcast } from 'react-icons/bs';
+import { Controls } from './Controls';
+import { ProgressBar } from './ProgressBar';
 
 interface SongsProps {
   songs: string[];
@@ -25,8 +20,6 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const progressBarRef = useRef<HTMLInputElement>(null);
   const playAnimationRef = useRef<number>();
-
-  console.log(isPlaying);
 
   function onLoadMetaData() {
     const seconds = audioRef.current!.duration;
@@ -83,30 +76,10 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
     return '00:00';
   };
 
-  function playSong() {
-    audioRef.current?.play();
-    setIsPlaying(true);
-  }
-
-  function pauseSong() {
-    audioRef.current?.pause();
-    setIsPlaying(false);
-  }
-
-  function muteSong() {
-    audioRef.current!.volume = 0;
-  }
-
   function nextSong() {
     if (currentSongIndex < songs.length - 1) {
       setCurrentSongIndex(currentSongIndex + 1);
       setIsPlaying(true);
-    }
-  }
-
-  function previousSong() {
-    if (currentSongIndex > 0) {
-      setCurrentSongIndex(currentSongIndex - 1);
     }
   }
 
@@ -156,45 +129,27 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
               <small>Youmi Kimura</small>
             </div>
 
-            <div className="flex justify-between items-center text-zinc-300">
-              <small aria-label="current-time">
-                {formatTime(timeProgress)}
-              </small>
-              <input
-                ref={progressBarRef}
-                onChange={handleProgressChange}
-                defaultValue={0}
-                type="range"
-                aria-label="audio progress bar"
-              />
-              <small aria-label="duration">{formatTime(duration)}</small>
-            </div>
+            <ProgressBar
+              {...{
+                duration,
+                formatTime,
+                handleProgressChange,
+                progressBarRef,
+                timeProgress,
+              }}
+            />
           </header>
 
-          <ul className="flex items-center gap-5 w-fit mt-4 mx-auto">
-            <button onClick={previousSong}>
-              <BsSkipStartFill className="h-7 w-7 cursor-pointer" />
-            </button>
-
-            {/* controls to play and pause the song */}
-            {isPlaying ? (
-              <button onClick={pauseSong} aria-label="button to pause the song">
-                <BsPauseFill className="h-9 w-9 cursor-pointer" />
-              </button>
-            ) : (
-              <button onClick={playSong} aria-label="button to play the song">
-                <BsPlayFill className="h-9 w-9 cursor-pointer" />
-              </button>
-            )}
-
-            <button onClick={nextSong}>
-              <BsFillSkipEndFill className="h-7 w-7 cursor-pointer" />
-            </button>
-
-            <button onClick={muteSong}>
-              <BsFillVolumeUpFill className="h-7 w-7 cursor-pointer" />
-            </button>
-          </ul>
+          <Controls
+            {...{
+              isPlaying,
+              setIsPlaying,
+              currentSongIndex,
+              audioRef,
+              setCurrentSongIndex,
+              songs,
+            }}
+          />
         </section>
       </aside>
     </div>
