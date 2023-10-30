@@ -26,31 +26,35 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
   const progressBarRef = useRef<HTMLInputElement>(null);
   const playAnimationRef = useRef<number>();
 
+  console.log(isPlaying);
+
   function onLoadMetaData() {
-    const seconds = audioRef.current?.duration;
+    const seconds = audioRef.current!.duration;
     setDuration(seconds);
 
     progressBarRef.current!.max = seconds!.toString();
   }
 
   const repeat = useCallback(() => {
-    const currentTime = Math.floor(audioRef.current!.currentTime).toString();
-    setTimeProgress(Number(currentTime));
+    if (isPlaying) {
+      const currentTime = Math.floor(audioRef.current!.currentTime).toString();
+      setTimeProgress(Number(currentTime));
 
-    progressBarRef.current!.value = currentTime;
+      progressBarRef.current!.value = currentTime;
 
-    let progress = Number(progressBarRef.current!.value);
+      let progress = Number(progressBarRef.current!.value);
 
-    progressBarRef.current?.style.setProperty(
-      '--range-progress',
-      `${(progress / duration!) * 100}%`
-    );
+      progressBarRef.current?.style.setProperty(
+        '--range-progress',
+        `${(progress / duration!) * 100}%`
+      );
 
-    playAnimationRef.current = requestAnimationFrame(repeat);
-  }, [duration]);
+      playAnimationRef.current = requestAnimationFrame(repeat);
+    }
+  }, [duration, isPlaying]);
 
   useEffect(() => {
-    let animationFrameId = progressBarRef.current;
+    let animationFrameId = playAnimationRef.current;
 
     if (isPlaying) {
       audioRef.current?.play();
@@ -140,7 +144,6 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
               key={songs[currentSongIndex]}
               onLoadedMetadata={onLoadMetaData}
               onEnded={nextSong}
-              autoPlay
               preload="auto"
               ref={audioRef}
               typeof="audio/mp3"
