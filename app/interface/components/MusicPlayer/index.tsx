@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   BsPlayFill,
@@ -9,10 +9,102 @@ import {
   BsFillSkipEndFill,
   BsSkipStartFill,
   BsBroadcast,
+  BsFillVolumeUpFill,
 } from 'react-icons/bs';
 
-export function MusicPlayerComponent() {
-  const [playMusic, setPlayMusic] = useState(true);
+interface SongsProps {
+  songs: string[];
+}
+
+export function MusicPlayerComponent({ songs }: SongsProps) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [timeProgress, setTimeProgress] = useState<number | undefined>(0);
+  const [duration, setDuration] = useState<number | undefined>(0);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const progressBarRef = useRef<HTMLInputElement>(null);
+  const playAnimationRef = useRef<number>();
+
+  function onLoadMetaData() {
+    const seconds = audioRef.current?.duration;
+    setDuration(seconds);
+
+    progressBarRef.current!.max = seconds!.toString();
+  }
+
+  const repeat = useCallback(() => {
+    const currentTime = Math.floor(audioRef.current!.currentTime).toString();
+    setTimeProgress(Number(currentTime));
+
+    progressBarRef.current!.value = currentTime;
+
+    let progress = Number(progressBarRef.current!.value);
+
+    progressBarRef.current?.style.setProperty(
+      '--range-progress',
+      `${(progress / duration!) * 100}%`
+    );
+
+    playAnimationRef.current = requestAnimationFrame(repeat);
+  }, [duration]);
+
+  useEffect(() => {
+    let animationFrameId = progressBarRef.current;
+
+    if (isPlaying) {
+      audioRef.current?.play();
+      playAnimationRef.current = requestAnimationFrame(repeat);
+    } else {
+      audioRef.current?.pause();
+      cancelAnimationFrame(Number(animationFrameId));
+    }
+  }, [isPlaying, repeat]);
+
+  function handleProgressChange() {
+    audioRef.current!.currentTime = Number(progressBarRef.current!.value);
+  }
+
+  const formatTime = (time: number | undefined) => {
+    if (time && !isNaN(time)) {
+      const minutes = Math.floor(time / 60);
+      const seconds = Math.floor(time % 60);
+
+      const formatMinutes = String(minutes).padStart(2, '0');
+      const formatSeconds = String(seconds).padStart(2, '0');
+
+      return `${formatMinutes}:${formatSeconds}`;
+    }
+
+    return '00:00';
+  };
+
+  function playSong() {
+    audioRef.current?.play();
+    setIsPlaying(true);
+  }
+
+  function pauseSong() {
+    audioRef.current?.pause();
+    setIsPlaying(false);
+  }
+
+  function muteSong() {
+    audioRef.current!.volume = 0;
+  }
+
+  function nextSong() {
+    if (currentSongIndex < songs.length - 1) {
+      setCurrentSongIndex(currentSongIndex + 1);
+      setIsPlaying(true);
+    }
+  }
+
+  function previousSong() {
+    if (currentSongIndex > 0) {
+      setCurrentSongIndex(currentSongIndex - 1);
+    }
+  }
 
   return (
     <div className="w-full">
@@ -21,11 +113,11 @@ export function MusicPlayerComponent() {
       </span>
 
       <aside className="relative top-[27rem] my-0 mx-auto bg-zinc-600 flex rounded-xl p-3 max-w-sm">
-        <div className="w-40 h-28">
+        <div className="w-40 h-32">
           <Image
             className="object-cover w-full h-full rounded-xl"
             width={160}
-            height={112}
+            height={128}
             unoptimized
             src={
               'https://lofigirl.com/wp-content/uploads/elementor/thumbs/summer-boy-qc2031oy0tv0ndmc3vjny71vdjsvm8tdvfrah4drc0.png'
@@ -40,8 +132,19 @@ export function MusicPlayerComponent() {
         >
           <header>
             <h4 aria-label="music title" className="text-xl font-semibold">
-              Always with me
+              Green Garden
             </h4>
+
+            <audio
+              src={songs[currentSongIndex]}
+              key={songs[currentSongIndex]}
+              onLoadedMetadata={onLoadMetaData}
+              onEnded={nextSong}
+              autoPlay
+              preload="auto"
+              ref={audioRef}
+              typeof="audio/mp3"
+            />
 
             <div
               className="my-1 font-mono text-gray-300"
@@ -49,27 +152,45 @@ export function MusicPlayerComponent() {
             >
               <small>Youmi Kimura</small>
             </div>
+
+            <div className="flex justify-between items-center text-zinc-300">
+              <small aria-label="current-time">
+                {formatTime(timeProgress)}
+              </small>
+              <input
+                ref={progressBarRef}
+                onChange={handleProgressChange}
+                defaultValue={0}
+                type="range"
+                aria-label="audio progress bar"
+              />
+              <small aria-label="duration">{formatTime(duration)}</small>
+            </div>
           </header>
 
           <ul className="flex items-center gap-5 w-fit mt-4 mx-auto">
-            <BsSkipStartFill className="h-7 w-7 cursor-pointer" />
+            <button onClick={previousSong}>
+              <BsSkipStartFill className="h-7 w-7 cursor-pointer" />
+            </button>
 
-            {/* play and pause the song */}
-            {playMusic ? (
-              <BsPlayFill
-                aria-label="button to play the song"
-                className="h-9 w-9 cursor-pointer"
-                onClick={() => setPlayMusic(false)}
-              />
+            {/* controls to play and pause the song */}
+            {isPlaying ? (
+              <button onClick={pauseSong} aria-label="button to pause the song">
+                <BsPauseFill className="h-9 w-9 cursor-pointer" />
+              </button>
             ) : (
-              <BsPauseFill
-                aria-label="button to pause the song"
-                className="h-9 w-9 cursor-pointer"
-                onClick={() => setPlayMusic(true)}
-              />
+              <button onClick={playSong} aria-label="button to play the song">
+                <BsPlayFill className="h-9 w-9 cursor-pointer" />
+              </button>
             )}
 
-            <BsFillSkipEndFill className="h-7 w-7 cursor-pointer" />
+            <button onClick={nextSong}>
+              <BsFillSkipEndFill className="h-7 w-7 cursor-pointer" />
+            </button>
+
+            <button onClick={muteSong}>
+              <BsFillVolumeUpFill className="h-7 w-7 cursor-pointer" />
+            </button>
           </ul>
         </section>
       </aside>
