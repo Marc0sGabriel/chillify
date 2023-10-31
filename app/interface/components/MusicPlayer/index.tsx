@@ -62,6 +62,13 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
     audioRef.current!.currentTime = Number(progressBarRef.current!.value);
   }
 
+  function nextSong() {
+    if (currentSongIndex < songs.length - 1) {
+      setCurrentSongIndex(currentSongIndex + 1);
+      setIsPlaying(true);
+    }
+  }
+
   const formatTime = (time: number | undefined) => {
     if (time && !isNaN(time)) {
       const minutes = Math.floor(time / 60);
@@ -75,13 +82,6 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
 
     return '00:00';
   };
-
-  function nextSong() {
-    if (currentSongIndex < songs.length - 1) {
-      setCurrentSongIndex(currentSongIndex + 1);
-      setIsPlaying(true);
-    }
-  }
 
   return (
     <div className="w-full">
