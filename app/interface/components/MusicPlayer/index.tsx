@@ -2,16 +2,25 @@
 
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
 import { BsBroadcast } from 'react-icons/bs';
 import { Controls } from './Controls';
 import { ProgressBar } from './ProgressBar';
 
 interface SongsProps {
-  songs: string[];
+  artist: string | null;
+  created_at: string;
+  id: string;
+  song_cover: string | null;
+  song_link: string | null;
+  title: string | null;
 }
 
-export function MusicPlayerComponent({ songs }: SongsProps) {
+interface DataProps {
+  data: SongsProps[] | null;
+  songsLink: (string | null)[];
+}
+
+export function MusicPlayerComponent({ data, songsLink }: DataProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [timeProgress, setTimeProgress] = useState<number | undefined>(0);
@@ -23,6 +32,7 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
 
   function onLoadMetaData() {
     const seconds = audioRef.current!.duration;
+
     setDuration(seconds);
 
     progressBarRef.current!.max = seconds!.toString();
@@ -31,6 +41,7 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
   const repeat = useCallback(() => {
     if (isPlaying) {
       const currentTime = Math.floor(audioRef.current!.currentTime).toString();
+
       setTimeProgress(Number(currentTime));
 
       progressBarRef.current!.value = currentTime;
@@ -63,8 +74,9 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
   }
 
   function nextSong() {
-    if (currentSongIndex < songs.length - 1) {
+    if (currentSongIndex < data!.length - 1) {
       setCurrentSongIndex(currentSongIndex + 1);
+
       setIsPlaying(true);
     }
   }
@@ -73,7 +85,6 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
     if (time && !isNaN(time)) {
       const minutes = Math.floor(time / 60);
       const seconds = Math.floor(time % 60);
-
       const formatMinutes = String(minutes).padStart(2, '0');
       const formatSeconds = String(seconds).padStart(2, '0');
 
@@ -85,20 +96,21 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
 
   return (
     <div className="w-full">
-      <span className="text-gray-500 left-10 top-24 absolute flex items-center gap-2 w-fit">
-        <BsBroadcast className="fill-purple-500" /> Playing now
-      </span>
+      {isPlaying && (
+        <span className="text-gray-500 left-10 top-24 absolute flex items-center gap-2 w-fit">
+          <BsBroadcast className="fill-purple-500" /> Playing now -{' '}
+          {data![currentSongIndex].title}
+        </span>
+      )}
 
       <aside className="relative top-[27rem] my-0 mx-auto bg-zinc-600 flex rounded-xl p-3 max-w-sm">
-        <div className="w-40 h-32">
+        <div className="w-44 h-32">
           <Image
             className="object-cover w-full h-full rounded-xl"
-            width={160}
+            width={176}
             height={128}
             unoptimized
-            src={
-              'https://lofigirl.com/wp-content/uploads/elementor/thumbs/summer-boy-qc2031oy0tv0ndmc3vjny71vdjsvm8tdvfrah4drc0.png'
-            }
+            src={data![currentSongIndex].song_cover!}
             alt={'song album image'}
           />
         </div>
@@ -109,12 +121,12 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
         >
           <header>
             <h4 aria-label="music title" className="text-xl font-semibold">
-              Green Garden
+              {data![currentSongIndex].title}
             </h4>
 
             <audio
-              src={songs[currentSongIndex]}
-              key={songs[currentSongIndex]}
+              src={songsLink[currentSongIndex]!}
+              key={songsLink[currentSongIndex]}
               onLoadedMetadata={onLoadMetaData}
               onEnded={nextSong}
               preload="auto"
@@ -126,7 +138,7 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
               className="my-1 font-mono text-gray-300"
               aria-label="artist name"
             >
-              <small>Youmi Kimura</small>
+              <small>{data![currentSongIndex].artist}</small>
             </div>
 
             <ProgressBar
@@ -147,7 +159,7 @@ export function MusicPlayerComponent({ songs }: SongsProps) {
               currentSongIndex,
               audioRef,
               setCurrentSongIndex,
-              songs,
+              songsLink,
             }}
           />
         </section>
