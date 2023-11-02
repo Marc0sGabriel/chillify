@@ -74,6 +74,16 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
   }
 
   function nextSong() {
+    const parseDuration = Math.floor(duration!);
+    const isProgressEqualDuration = timeProgress === parseDuration;
+
+    // if the last song finishes playing return to the first song
+    if (currentSongIndex + 1 === data!.length && isProgressEqualDuration) {
+      setCurrentSongIndex(0);
+      setIsPlaying(true);
+    }
+
+    // if the index song is lower than array length go to next
     if (currentSongIndex < data!.length - 1) {
       setCurrentSongIndex(currentSongIndex + 1);
 
