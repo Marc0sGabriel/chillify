@@ -107,13 +107,13 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
   return (
     <div className="w-full">
       {isPlaying && (
-        <span className="text-gray-500 left-10 top-24 absolute flex items-center gap-2 w-fit">
+        <span className="text-gray-400 left-10 top-24 absolute flex items-center gap-2 w-fit">
           <BsBroadcast className="fill-purple-500" /> Playing now -{' '}
           {data![currentSongIndex].title}
         </span>
       )}
 
-      <aside className="relative top-[27rem] my-0 mx-auto bg-zinc-600 flex rounded-xl p-3 max-w-sm">
+      <aside className="relative top-[27rem] backdrop-blur-sm my-0 mx-auto bg-zinc-900/70 flex rounded-xl p-3 max-w-sm">
         <div className="w-44 h-32">
           <Image
             className="object-cover w-full h-full rounded-xl"
