@@ -1,54 +1,81 @@
 'use client';
 
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { z } from 'zod';
 import { Tasks } from './Tasks';
 import { BsXOctagon, BsGripHorizontal, BsPlusLg } from 'react-icons/bs';
 import Draggable from '@/app/utils/dragElement';
 
-const taskSchema = z.object({
-  getTaskValue: z
-    .string()
-    .min(3, { message: 'Please fill this field' })
-    .max(40, { message: 'task name is too long exceeded 40 letter limit' }),
-});
+export interface TaskProps {
+  id: string;
+  title: string;
+  isCompleted: boolean;
+}
 
 export function TodoListComponent() {
-  const [task, setTask] = useState<string[]>(['']);
+  const [task, setTask] = useState<TaskProps[]>([]);
   const [getTaskValue, setGetTaskValue] = useState('');
-  const [isCompletedTask, setIsCompletedTask] = useState(false);
 
   function onChangeTasks(event: ChangeEvent<HTMLInputElement>) {
     setGetTaskValue(event.target.value);
   }
 
+  function handleCreateNewTask(taskName: string) {
+    setTask([
+      ...task,
+      {
+        id: crypto.randomUUID(),
+        title: taskName,
+        isCompleted: false,
+      },
+    ]);
+  }
+
+  function handleCheckAsComplete(taskID: string) {
+    const newTasks = task.map((taskData: TaskProps) => {
+      if (taskData.id === taskID) {
+        return {
+          ...taskData,
+          isCompleted: !taskData.isCompleted,
+        };
+      }
+
+      return taskData;
+    });
+
+    setTask(newTasks);
+  }
+
+  function handleDeleteTask(taskID: string) {
+    const removeTasks = task.filter((taskData: TaskProps) => {
+      taskData.id !== taskID;
+    });
+
+    setTask(removeTasks);
+
+    console.log(removeTasks);
+  }
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const validate = taskSchema.parse({ getTaskValue });
-
-    setTask([...task, validate.getTaskValue]);
-
+    handleCreateNewTask(getTaskValue);
     setGetTaskValue('');
     event.currentTarget.reset();
   }
 
-  function handleDeleteTask() {
-    const findTask = task.filter((taskName) => taskName === taskName);
-
-    console.log(findTask);
-  }
-
-  const totalTasks = task.length - 1;
+  const pendingTasks = task.length;
   const handleErrorTaskLength = getTaskValue.length >= 40;
   const isEmptyTaskField = getTaskValue.length === 0;
+  const finishedTasks = task.filter((data) => data.isCompleted).length;
 
   return (
     <Draggable>
-      <div className="card w-[30rem] bg-zinc-800 p-3 mx-auto mb-7 absolute">
+      <div className="card w-[30rem] bg-zinc-800 p-3 mx-auto mb-7 absolute pointer-events-auto">
         <BsGripHorizontal className="h-7 w-7 self-end cursor-grab" />
         <h3 className="text-2xl font-medium">Your tasks today</h3>
-        <span className="font-mono">0/{totalTasks}</span>
+        <span className="font-mono">
+          {finishedTasks}/{pendingTasks}
+        </span>
         <div className="divider" />
 
         <form onSubmit={handleSubmit} action="" className="flex gap-4">
@@ -60,15 +87,14 @@ export function TodoListComponent() {
             className="input w-full mb-5 bg-transparent input-bordered focus:outline-sky-400"
           />
 
-          {/* Trocar por Ref para não renderizar atoa */}
           {handleErrorTaskLength && (
-            <div className="animate-pulse alert alert-error w-96 fixed left-12 top-[45rem] font-mono font-bold">
+            <div className="animate-pulse alert alert-error w-96 fixed left-12 top-[43rem] font-mono font-bold">
               <BsXOctagon className="w-5 h-5" /> Error: task name is too long!
             </div>
           )}
 
           <button
-            disabled={isEmptyTaskField}
+            disabled={isEmptyTaskField || handleErrorTaskLength}
             className="btn btn-circle btn-outline text-2xl border-zinc-200 hover:bg-zinc-200"
           >
             <BsPlusLg className="w-6 h-6" />
@@ -80,11 +106,10 @@ export function TodoListComponent() {
           {task
             .map((task) => (
               <Tasks
-                key={task}
-                taskName={task}
-                completedTask={isCompletedTask}
-                toggleTask={setIsCompletedTask}
-                deleteTask={handleDeleteTask}
+                key={task.id}
+                task={task}
+                onComplete={handleCheckAsComplete}
+                onDelete={handleDeleteTask}
               />
             ))
             .reverse()}
