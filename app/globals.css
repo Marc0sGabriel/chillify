@@ -6,6 +6,10 @@
   --background-color: #141414;
   --range-progress: 0;
   --buffered-width: 0%;
+
+  /* colors for progress bar in different browsers */
+  --progress-bar-chrome-safari: #77fffa;
+  --progress-bar-firefox: #15eecc;
 }
 
 body {
@@ -68,7 +72,7 @@ input[type='range']::-moz-range-track {
 input[type='range']::before {
   content: '';
   height: 2px;
-  background: #15eecc;
+  background: var(--progress-bar-chrome-safari);
   width: var(--range-progress);
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
@@ -79,7 +83,7 @@ input[type='range']::before {
 
 /* played progress length - firefox */
 input[type='range']::-moz-range-progress {
-  background: #15eecc;
+  background: var(--progress-bar-firefox);
   border-bottom-left-radius: 2px;
   border-top-left-radius: 2px;
   height: 2px;
@@ -92,7 +96,7 @@ input[type='range']::-webkit-slider-thumb {
   width: 8px;
   border-radius: 50%;
   border: none;
-  background-color: #ee3d15;
+  background-color: var(--progress-bar-chrome-safari);
   cursor: pointer;
   position: relative;
 }
@@ -107,7 +111,7 @@ input[type='range']::-moz-range-thumb {
   height: 8px;
   width: 8px;
   border-radius: 50%;
-  background: #15eecc;
+  background: var(--progress-bar-firefox);
   cursor: pointer;
   border: transparent;
   position: relative;
