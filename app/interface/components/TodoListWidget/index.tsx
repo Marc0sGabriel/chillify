@@ -46,13 +46,11 @@ export function TodoListComponent() {
   }
 
   function handleDeleteTask(taskID: string) {
-    const removeTasks = task.filter((taskData: TaskProps) => {
-      taskData.id !== taskID;
-    });
+    const removeTasks = task.filter(
+      (taskData: TaskProps) => taskData.id !== taskID
+    );
 
     setTask(removeTasks);
-
-    console.log(removeTasks);
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -104,7 +102,7 @@ export function TodoListComponent() {
         {/* TASK LIST */}
         <ul className="max-h-52 overflow-y-auto px-2">
           {task
-            .map((task) => (
+            .map((task, index) => (
               <Tasks
                 key={task.id}
                 task={task}
