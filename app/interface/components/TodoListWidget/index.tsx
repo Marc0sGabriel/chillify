@@ -16,6 +16,7 @@ const taskSchema = z.object({
 export function TodoListComponent() {
   const [task, setTask] = useState<string[]>(['']);
   const [getTaskValue, setGetTaskValue] = useState('');
+  const [isCompletedTask, setIsCompletedTask] = useState(false);
 
   function onChangeTasks(event: ChangeEvent<HTMLInputElement>) {
     setGetTaskValue(event.target.value);
@@ -30,6 +31,12 @@ export function TodoListComponent() {
 
     setGetTaskValue('');
     event.currentTarget.reset();
+  }
+
+  function handleDeleteTask() {
+    const findTask = task.filter((taskName) => taskName === taskName);
+
+    console.log(findTask);
   }
 
   const totalTasks = task.length - 1;
@@ -70,7 +77,17 @@ export function TodoListComponent() {
 
         {/* TASK LIST */}
         <ul className="max-h-52 overflow-y-auto px-2">
-          {task.map((task) => <Tasks key={task} taskName={task} />).reverse()}
+          {task
+            .map((task) => (
+              <Tasks
+                key={task}
+                taskName={task}
+                completedTask={isCompletedTask}
+                toggleTask={setIsCompletedTask}
+                deleteTask={handleDeleteTask}
+              />
+            ))
+            .reverse()}
         </ul>
       </div>
     </Draggable>
