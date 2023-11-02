@@ -36,6 +36,8 @@ function Draggable({ children }: DraggableProps) {
       style={{
         position: 'absolute',
         userSelect: 'none',
+        width: 'fit-content',
+        pointerEvents: 'none',
       }}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
