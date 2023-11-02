@@ -11,7 +11,7 @@ export default async function fetchLofiSongs() {
 
   const { data: songs } = await supabase
     .from('songs')
-    .select('')
+    .select('*')
     .order('title');
 
   return songs;
