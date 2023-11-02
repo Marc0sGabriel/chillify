@@ -1,6 +1,7 @@
 'use client';
 
 import { Dispatch, MutableRefObject, SetStateAction } from 'react';
+
 import {
   BsFillSkipEndFill,
   BsFillVolumeUpFill,
@@ -10,21 +11,21 @@ import {
 } from 'react-icons/bs';
 
 interface ControlsProps {
-  isPlaying: boolean;
   setIsPlaying: Dispatch<SetStateAction<boolean>>;
   setCurrentSongIndex: Dispatch<SetStateAction<number>>;
+  isPlaying: boolean;
   currentSongIndex: number;
   audioRef: MutableRefObject<HTMLAudioElement | null>;
-  songs: string[];
+  songsLink: (string | null)[];
 }
 
 export function Controls({
   currentSongIndex,
   isPlaying,
-  setIsPlaying,
   audioRef,
+  songsLink,
+  setIsPlaying,
   setCurrentSongIndex,
-  songs,
 }: ControlsProps) {
   function playSong() {
     audioRef.current?.play();
@@ -41,8 +42,9 @@ export function Controls({
   }
 
   function nextSong() {
-    if (currentSongIndex < songs.length - 1) {
+    if (currentSongIndex < songsLink.length - 1) {
       setCurrentSongIndex(currentSongIndex + 1);
+
       setIsPlaying(true);
     }
   }
@@ -60,6 +62,7 @@ export function Controls({
       </button>
 
       {/* controls to play and pause the song */}
+
       {isPlaying ? (
         <button onClick={pauseSong} aria-label="button to pause the song">
           <BsPauseFill className="h-9 w-9 cursor-pointer" />
