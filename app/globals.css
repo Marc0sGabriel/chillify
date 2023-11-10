@@ -5,6 +5,7 @@
 :root {
   --background-color: #141414;
   --range-progress: 0;
+  --volume-range: 0;
   --buffered-width: 0%;
 
   /* colors for progress bar in different browsers */
@@ -15,11 +16,12 @@
 body {
   color: #f1f1f1;
   background: var(--background-color);
-  background-image: url('../public/images/hall.jpg');
+  background-image: url('../public/images/japan.jpg');
   background-repeat: no-repeat;
+  background-position: center;
   background-size: cover;
   height: 100vh;
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 /* width */
@@ -42,6 +44,29 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #905ac6;
+}
+
+/* Volume Control */
+
+#volumeControl::-webkit-slider-thumb {
+  -webkit-appearance: none;
+
+  /* its 0px just to hide range bullet */
+  height: 0px;
+  width: 0px;
+
+  border: none;
+  background-color: #ccc !important;
+  cursor: pointer;
+  position: relative;
+}
+
+#volumeControl:active::-webkit-slider-thumb {
+  transform: scale(1) !important;
+}
+
+#volumeControl::-moz-range-track {
+  background: var(--progress-bar-chrome-safari) !important;
 }
 
 /* Player Range */
