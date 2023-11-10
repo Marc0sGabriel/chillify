@@ -49,7 +49,7 @@ export function PomodoroWidget() {
 
   return (
     <Draggable>
-      <div className="relative translate-x-1/2 left-[240%] pointer-events-auto">
+      <div className="relative translate-x-1/2 left-[220%] pointer-events-auto">
         <nav className="w-fit mx-auto">
           <button
             onClick={() => setTime(25 * 60)}
@@ -72,7 +72,7 @@ export function PomodoroWidget() {
             Long break
           </button>
         </nav>
-        <div className="card w-[24rem] p-3 bg-zinc-700 mx-auto mt-1 mb-10 flex-row justify-between items-center gap-5">
+        <div className="card w-[25rem] p-3 bg-zinc-800 mx-auto mt-1 mb-10 flex-row justify-between items-center gap-5">
           <BsGripVertical
             className="h-7 w-7 cursor-grab"
             arial-label="click and hold to drag element"
