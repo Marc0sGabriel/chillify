@@ -2,7 +2,7 @@ import fetchLofiSongs from '@/app/api/lofi/lofi';
 
 import { MusicPlayerComponent } from '..';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function Player() {
   const data = await fetchLofiSongs();
