@@ -4,7 +4,6 @@ import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 import {
   BsFillSkipEndFill,
-  BsFillVolumeUpFill,
   BsPauseFill,
   BsPlayFill,
   BsSkipStartFill,
