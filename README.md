@@ -1,5 +1,3 @@
-Aqui estão as palavras-chave destacadas no seu markdown:
-
 # **Chillify**
 
 **Experimente o Chillify Agora!**
