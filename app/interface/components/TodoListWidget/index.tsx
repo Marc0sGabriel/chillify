@@ -4,6 +4,7 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { Tasks } from './Tasks';
 import { BsXOctagon, BsGripHorizontal, BsPlusLg } from 'react-icons/bs';
 import Draggable from '@/app/utils/dragElement';
+import { usePersistData } from '@/app/utils/usePersistData';
 
 export interface TaskProps {
   id: string;
@@ -11,8 +12,13 @@ export interface TaskProps {
   isCompleted: boolean;
 }
 
+const LOCAL_STORAGE_TASKS_KEY = '@chillify-todo-list:savedTasks';
+
 export function TodoListComponent() {
-  const [task, setTask] = useState<TaskProps[]>([]);
+  const [task, setTask] = usePersistData<TaskProps[]>(
+    LOCAL_STORAGE_TASKS_KEY,
+    []
+  );
   const [getTaskValue, setGetTaskValue] = useState('');
 
   function onChangeTasks(event: ChangeEvent<HTMLInputElement>) {
@@ -64,11 +70,13 @@ export function TodoListComponent() {
   const pendingTasks = task.length;
   const handleErrorTaskLength = getTaskValue.length >= 40;
   const isEmptyTaskField = getTaskValue.length === 0;
-  const finishedTasks = task.filter((data) => data.isCompleted).length;
+  const finishedTasks = task.filter(
+    (data: TaskProps) => data.isCompleted
+  ).length;
 
   return (
     <Draggable>
-      <div className="card w-[30rem] bg-zinc-800 p-3 mx-auto mb-7 absolute pointer-events-auto">
+      <div className="card w-[28rem] bg-zinc-800 p-3 mx-auto mb-7 relative left-11 pointer-events-auto">
         <BsGripHorizontal className="h-7 w-7 self-end cursor-grab" />
         <h3 className="text-2xl font-medium">Your tasks today</h3>
         <span className="font-mono">
@@ -102,7 +110,7 @@ export function TodoListComponent() {
         {/* TASK LIST */}
         <ul className="max-h-52 overflow-y-auto px-2">
           {task
-            .map((task, index) => (
+            .map((task: TaskProps) => (
               <Tasks
                 key={task.id}
                 task={task}
