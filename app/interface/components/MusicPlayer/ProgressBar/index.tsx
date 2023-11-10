@@ -1,7 +1,7 @@
 import { RefObject } from 'react';
+import { formatTime } from '@/app/utils/formatTime';
 
 interface ProgressBarProps {
-  formatTime: (time: number | undefined) => string;
   handleProgressChange: () => void;
   duration: number | undefined;
   timeProgress: number | undefined;
@@ -10,7 +10,6 @@ interface ProgressBarProps {
 
 export function ProgressBar({
   duration,
-  formatTime,
   handleProgressChange,
   progressBarRef,
   timeProgress,
