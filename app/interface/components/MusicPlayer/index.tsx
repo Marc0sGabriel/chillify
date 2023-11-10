@@ -23,7 +23,7 @@ interface DataProps {
 export function MusicPlayerComponent({ data, songsLink }: DataProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const [volume, setVolume] = useState<number>(50);
+  const [volume, setVolume] = useState<number>(60);
   const [timeProgress, setTimeProgress] = useState<number | undefined>(0);
   const [duration, setDuration] = useState<number | undefined>(0);
 
@@ -98,19 +98,6 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
     setVolume(newVolume);
   }
 
-  const formatTime = (time: number | undefined) => {
-    if (time && !isNaN(time)) {
-      const minutes = Math.floor(time / 60);
-      const seconds = Math.floor(time % 60);
-      const formatMinutes = String(minutes).padStart(2, '0');
-      const formatSeconds = String(seconds).padStart(2, '0');
-
-      return `${formatMinutes}:${formatSeconds}`;
-    }
-
-    return '00:00';
-  };
-
   return (
     <div className="w-full">
       {isPlaying && (
@@ -145,6 +132,7 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
               src={songsLink[currentSongIndex]!}
               key={songsLink[currentSongIndex]}
               onLoadedMetadata={onLoadMetaData}
+              onLoadedData={onLoadMetaData}
               onEnded={nextSong}
               preload="auto"
               ref={audioRef}
@@ -161,7 +149,6 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
             <ProgressBar
               {...{
                 duration,
-                formatTime,
                 handleProgressChange,
                 progressBarRef,
                 timeProgress,
