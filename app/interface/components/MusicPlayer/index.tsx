@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { BsBroadcast } from 'react-icons/bs';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { BsBroadcast, BsVolumeDown, BsVolumeUp } from 'react-icons/bs';
 import { Controls } from './Controls';
 import { ProgressBar } from './ProgressBar';
 
@@ -23,6 +23,7 @@ interface DataProps {
 export function MusicPlayerComponent({ data, songsLink }: DataProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [volume, setVolume] = useState<number>(50);
   const [timeProgress, setTimeProgress] = useState<number | undefined>(0);
   const [duration, setDuration] = useState<number | undefined>(0);
 
@@ -63,11 +64,12 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
     if (isPlaying) {
       audioRef.current?.play();
       playAnimationRef.current = requestAnimationFrame(repeat);
+      audioRef.current!.volume = volume / 100;
     } else {
       audioRef.current?.pause();
       cancelAnimationFrame(Number(animationFrameId));
     }
-  }, [isPlaying, repeat]);
+  }, [isPlaying, repeat, volume]);
 
   function handleProgressChange() {
     audioRef.current!.currentTime = Number(progressBarRef.current!.value);
@@ -89,6 +91,11 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
 
       setIsPlaying(true);
     }
+  }
+
+  function handleVolume(event: ChangeEvent<HTMLInputElement>) {
+    const newVolume = parseInt(event.target.value, 10);
+    setVolume(newVolume);
   }
 
   const formatTime = (time: number | undefined) => {
@@ -173,6 +180,27 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
             }}
           />
         </section>
+
+        <div className="absolute -left-16 bg-inherit rounded-xl h-full top-0 w-12">
+          <div className="flex flex-col items-center justify-center py-2 h-full gap">
+            <input
+              type="range"
+              name="volumeControl"
+              min={0}
+              max={100}
+              value={volume}
+              onInput={handleVolume}
+              className="range !-rotate-90 !w-24 !h-5 !rounded-full !bg-zinc-500 range-info"
+              id="volumeControl"
+            />
+
+            {volume < 35 ? (
+              <BsVolumeDown className="w-7 h-7 relative -bottom-12" />
+            ) : (
+              <BsVolumeUp className="w-7 h-7 relative -bottom-12" />
+            )}
+          </div>
+        </div>
       </aside>
     </div>
   );

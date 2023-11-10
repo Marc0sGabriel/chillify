@@ -37,10 +37,6 @@ export function Controls({
     setIsPlaying(false);
   }
 
-  function muteSong() {
-    audioRef.current!.volume = 0;
-  }
-
   function nextSong() {
     if (currentSongIndex < songsLink.length - 1) {
       setCurrentSongIndex(currentSongIndex + 1);
@@ -75,10 +71,6 @@ export function Controls({
 
       <button onClick={nextSong}>
         <BsFillSkipEndFill className="h-7 w-7 cursor-pointer" />
-      </button>
-
-      <button onClick={muteSong}>
-        <BsFillVolumeUpFill className="h-7 w-7 cursor-pointer" />
       </button>
     </ul>
   );
