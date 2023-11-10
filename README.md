@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Aqui estão as palavras-chave destacadas no seu markdown:
 
-## Getting Started
+# **Chillify**
 
-First, run the development server:
+**Experimente o Chillify Agora!**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+[Clique aqui](https://chillify-lofi.vercel.app/)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Chillify** é uma aplicação projetada para criar um ambiente propício para **produtividade** e **relaxamento**, surgiu por causa de problemas que eu enfrentava para encontrar websites que tivessem que consumissem poucos recursos ao reproduzir músicas. Essa aplicação integra **músicas lofi**, a técnica **Pomodoro** e uma **lista de tarefas (to-do list)**, o **Chillify** visa oferecer uma experiência completa para aumentar a **concentração**, reduzir o estresse e melhorar a **eficiência**, além de ser leve.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+![preview clean](/public/assets/preview.png)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## **Recursos Principais**
 
-## Learn More
+### **Músicas Lofi**
 
-To learn more about Next.js, take a look at the following resources:
+Desfrute de uma seleção cuidadosamente curada de **músicas lofi** para criar um ambiente tranquilo e inspirador. A **música lofi** é conhecida por seu efeito calmante, ideal para **concentração** e **foco** durante suas atividades.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### **Técnica Pomodoro**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+A técnica **Pomodoro** é uma abordagem comprovada para melhorar a **gestão do tempo** e aumentar a **produtividade**. O Chillify incorpora um **temporizador Pomodoro** ajustável, permitindo ciclos de **trabalho concentrado** intercalados com **pausas relaxantes** para otimizar a **eficiência**.
 
-## Deploy on Vercel
+### **Lista de Tarefas (To-Do List)**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Mantenha-se **organizado** e no controle de suas **tarefas diárias** com a **lista de tarefas integrada**. Adicione, edite e marque suas **tarefas concluídas** enquanto trabalha para atingir seus **objetivos** de maneira eficaz.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## **Como Usar**
+
+1. **Música Lofi:**
+
+   - Escolha entre uma variedade de faixas lofi disponíveis.
+   - Controle o **volume** e a **reprodução** para ajustar o ambiente de acordo com suas **preferências**.
+
+2. **Técnica Pomodoro:**
+
+   - Configure o **temporizador Pomodoro** de acordo com suas **necessidades de trabalho** e **pausa**.
+   - Receba **notificações visuais ou sonoras** para acompanhar o **progresso do ciclo Pomodoro**.
+
+3. **Lista de Tarefas:**
+   - Acesse a **lista de tarefas** para **adicionar** e **gerenciar** suas **atividades**.
+   - **Marque as tarefas concluídas** para manter o **foco** e a **motivação**.
+
+## **Instalação em máquina local**
+
+1. **Clone** este repositório:
+
+   ```bash
+   git clone https://github.com/Marc0sGabriel/chillify.git
+   ```
+
+2. Abra o arquivo e execute o comando `npm install` no seu terminal.
+
+3. Execute o comando `npm run dev`
+
+4. Acesse o seu localhost
+
+5. Comece a usar o Chillify para uma experiência aprimorada de **produtividade** e **relaxamento**.
+
+## **Contribuições**
+
+**Contribuições** são bem-vindas! Sinta-se à vontade para **abrir issues**, **propor novos recursos** ou **enviar pull requests** para melhorar o Chillify.
+
+## **Licença**
+
+Este projeto é licenciado sob a [Licença MIT](LICENSE). Sinta-se à vontade para usar, modificar e distribuir conforme necessário.
