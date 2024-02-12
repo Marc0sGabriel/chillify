@@ -1,24 +1,19 @@
 'use client';
 
 import Image from 'next/image';
+import { Inter } from 'next/font/google';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { BsBroadcast, BsVolumeDown, BsVolumeUp } from 'react-icons/bs';
 import { Controls } from './Controls';
 import { ProgressBar } from './ProgressBar';
-
-interface SongsProps {
-  artist: string | null;
-  created_at: string;
-  id: string;
-  song_cover: string | null;
-  song_link: string | null;
-  title: string | null;
-}
+import { SongsProps } from '@/types/songs.types';
 
 interface DataProps {
   data: SongsProps[] | null;
   songsLink: (string | null)[];
 }
+
+const inter = Inter({ subsets: ['latin'] });
 
 export function MusicPlayerComponent({ data, songsLink }: DataProps) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -36,7 +31,7 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
 
     setDuration(seconds);
 
-    progressBarRef.current!.max = seconds!.toString();
+    return (progressBarRef.current!.max = seconds!.toString());
   }
 
   const repeat = useCallback(() => {
@@ -60,6 +55,7 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
 
   useEffect(() => {
     let animationFrameId = playAnimationRef.current;
+    onLoadMetaData();
 
     if (isPlaying) {
       audioRef.current?.play();
@@ -114,7 +110,7 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
             width={176}
             height={128}
             unoptimized
-            src={data![currentSongIndex].song_cover!}
+            src={data![currentSongIndex].imageCover!}
             alt={'song album image'}
           />
         </div>
@@ -140,7 +136,7 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
             />
 
             <div
-              className="my-1 font-mono text-gray-300"
+              className={`${inter.className} text-zinc-300`}
               aria-label="artist name"
             >
               <small>{data![currentSongIndex].artist}</small>
