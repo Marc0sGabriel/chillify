@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Inter } from 'next/font/google';
+import { Inter, Orbitron } from 'next/font/google';
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { BsBroadcast, BsVolumeDown, BsVolumeUp } from 'react-icons/bs';
 import { Controls } from './Controls';
@@ -23,7 +23,6 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
   const [duration, setDuration] = useState<number | undefined>(0);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const progressBarRef = useRef<HTMLInputElement>(null);
   const playAnimationRef = useRef<number>();
 
   function onLoadMetaData() {
@@ -31,23 +30,14 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
 
     setDuration(seconds);
 
-    return (progressBarRef.current!.max = seconds!.toString());
+    return seconds!.toString();
   }
 
   const repeat = useCallback(() => {
     if (isPlaying) {
-      const currentTime = Math.floor(audioRef.current!.currentTime).toString();
+      const currentTime = Math.floor(audioRef.current!.currentTime);
 
       setTimeProgress(Number(currentTime));
-
-      progressBarRef.current!.value = currentTime;
-
-      let progress = Number(progressBarRef.current!.value);
-
-      progressBarRef.current?.style.setProperty(
-        '--range-progress',
-        `${(progress / duration!) * 100}%`
-      );
 
       playAnimationRef.current = requestAnimationFrame(repeat);
     }
@@ -59,17 +49,13 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
 
     if (isPlaying) {
       audioRef.current?.play();
-      playAnimationRef.current = requestAnimationFrame(repeat);
       audioRef.current!.volume = volume / 100;
+      playAnimationRef.current = requestAnimationFrame(repeat);
     } else {
       audioRef.current?.pause();
       cancelAnimationFrame(Number(animationFrameId));
     }
   }, [isPlaying, repeat, volume]);
-
-  function handleProgressChange() {
-    audioRef.current!.currentTime = Number(progressBarRef.current!.value);
-  }
 
   function nextSong() {
     const parseDuration = Math.floor(duration!);
@@ -89,102 +75,57 @@ export function MusicPlayerComponent({ data, songsLink }: DataProps) {
     }
   }
 
-  function handleVolume(event: ChangeEvent<HTMLInputElement>) {
-    const newVolume = parseInt(event.target.value, 10);
-    setVolume(newVolume);
-  }
-
   return (
-    <div className="w-full">
-      {isPlaying && (
-        <span className="text-gray-400 left-10 top-24 absolute flex items-center gap-2 w-fit">
-          <BsBroadcast className="fill-purple-500" /> Playing now -{' '}
-          {data![currentSongIndex].title}
-        </span>
-      )}
+    <div className="w-full lg:w-[1100px] mx-auto my-0">
+      <div className="relative w-fit mx-auto my-0 sm:mx-0">
+        <img
+          src="images/player.png"
+          className="w-64"
+          alt="mp3 player classic"
+        />
 
-      <aside className="relative top-[27rem] backdrop-blur-sm my-0 mx-auto bg-zinc-900/70 flex rounded-xl p-3 max-w-sm">
-        <div className="w-44 h-32">
-          <Image
-            className="object-cover w-full h-full rounded-xl"
-            width={176}
-            height={128}
-            unoptimized
-            src={data![currentSongIndex].imageCover!}
-            alt={'song album image'}
-          />
-        </div>
+        <img
+          src={data![currentSongIndex].imageCover!}
+          alt="current song image cover"
+          className="absolute opacity-80 mix-blend-screen left-12 top-16 w-40 h-40 object-cover rounded-lg"
+        />
 
-        <section
-          aria-label="music controls and music info"
-          className="ml-3 w-full"
-        >
-          <header>
-            <h4 aria-label="music title" className="text-xl font-semibold">
-              {data![currentSongIndex].title}
-            </h4>
+        <audio
+          src={songsLink[currentSongIndex]!}
+          key={songsLink[currentSongIndex]}
+          onLoadedMetadata={onLoadMetaData}
+          onLoadedData={onLoadMetaData}
+          preload="auto"
+          onEnded={() => nextSong()}
+          ref={audioRef}
+          typeof="audio/mp3"
+        />
 
-            <audio
-              src={songsLink[currentSongIndex]!}
-              key={songsLink[currentSongIndex]}
-              onLoadedMetadata={onLoadMetaData}
-              onLoadedData={onLoadMetaData}
-              onEnded={nextSong}
-              preload="auto"
-              ref={audioRef}
-              typeof="audio/mp3"
-            />
+        <ProgressBar {...{ duration, timeProgress }} />
 
-            <div
-              className={`${inter.className} text-zinc-300`}
-              aria-label="artist name"
-            >
-              <small>{data![currentSongIndex].artist}</small>
-            </div>
+        <footer className="absolute tracking-[0.2rem] text-[0.7rem] top-[40%] left-[3rem]">
+          <p className="lg:text-sm text-zinc-200">
+            {data![currentSongIndex].title}
+          </p>
 
-            <ProgressBar
-              {...{
-                duration,
-                handleProgressChange,
-                progressBarRef,
-                timeProgress,
-              }}
-            />
-          </header>
+          <p className="tracking-normal text-zinc-400">
+            {data![currentSongIndex].artist}
+          </p>
+        </footer>
 
-          <Controls
-            {...{
-              isPlaying,
-              setIsPlaying,
-              currentSongIndex,
-              audioRef,
-              setCurrentSongIndex,
-              songsLink,
-            }}
-          />
-        </section>
-
-        <div className="absolute -left-16 bg-inherit rounded-xl h-full top-0 w-12">
-          <div className="flex flex-col items-center justify-center py-2 h-full gap">
-            <input
-              type="range"
-              name="volumeControl"
-              min={0}
-              max={100}
-              value={volume}
-              onInput={handleVolume}
-              className="range !-rotate-90 !w-24 !h-5 !rounded-full !bg-zinc-500 range-info"
-              id="volumeControl"
-            />
-
-            {volume < 35 ? (
-              <BsVolumeDown className="w-7 h-7 relative -bottom-12" />
-            ) : (
-              <BsVolumeUp className="w-7 h-7 relative -bottom-12" />
-            )}
-          </div>
-        </div>
-      </aside>
+        <Controls
+          {...{
+            audioRef,
+            isPlaying,
+            setIsPlaying,
+            setVolume,
+            volume,
+            currentSongIndex,
+            songsLink,
+            setCurrentSongIndex,
+          }}
+        />
+      </div>
     </div>
   );
 }

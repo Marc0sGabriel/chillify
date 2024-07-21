@@ -1,17 +1,14 @@
 'use client';
 
-import { Dispatch, MutableRefObject, SetStateAction } from 'react';
-
-import {
-  BsFillSkipEndFill,
-  BsPauseFill,
-  BsPlayFill,
-  BsSkipStartFill,
-} from 'react-icons/bs';
+import { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
+import { LuPlay, LuSkipForward, LuSkipBack, LuPause } from 'react-icons/lu';
+import { PiPlusBold, PiMinusBold } from 'react-icons/pi';
 
 interface ControlsProps {
   setIsPlaying: Dispatch<SetStateAction<boolean>>;
+  setVolume: Dispatch<SetStateAction<number>>;
   setCurrentSongIndex: Dispatch<SetStateAction<number>>;
+  volume: number;
   isPlaying: boolean;
   currentSongIndex: number;
   audioRef: MutableRefObject<HTMLAudioElement | null>;
@@ -19,12 +16,14 @@ interface ControlsProps {
 }
 
 export function Controls({
-  currentSongIndex,
-  isPlaying,
   audioRef,
-  songsLink,
   setIsPlaying,
+  isPlaying,
+  setVolume,
+  volume,
+  currentSongIndex,
   setCurrentSongIndex,
+  songsLink,
 }: ControlsProps) {
   function playSong() {
     audioRef.current?.play();
@@ -50,27 +49,61 @@ export function Controls({
     }
   }
 
+  function decreaseVolumeSong() {
+    if (volume > 0) {
+      setVolume((prevState) => prevState - 10);
+    }
+  }
+
+  function increaseVolume() {
+    if (volume <= 90) {
+      setVolume((prevState) => prevState + 10);
+    }
+  }
+
   return (
-    <ul className="flex items-center gap-5 w-fit mt-4 mx-auto">
-      <button onClick={previousSong}>
-        <BsSkipStartFill className="h-7 w-7 cursor-pointer" />
+    <>
+      <button className="absolute bottom-[7.7rem] left-[7.4rem]">
+        {isPlaying ? (
+          <LuPause
+            onClick={() => pauseSong()}
+            className="w-6 h-6 pr-1 hover:text-purple-400 active:text-purple-400"
+          />
+        ) : (
+          <LuPlay
+            onClick={() => playSong()}
+            className="w-6 h-6 hover:text-purple-400 active:text-purple-400"
+          />
+        )}
       </button>
 
-      {/* controls to play and pause the song */}
-
-      {isPlaying ? (
-        <button onClick={pauseSong} aria-label="button to pause the song">
-          <BsPauseFill className="h-9 w-9 cursor-pointer" />
-        </button>
-      ) : (
-        <button onClick={playSong} aria-label="button to play the song">
-          <BsPlayFill className="h-9 w-9 cursor-pointer" />
-        </button>
-      )}
-
-      <button onClick={nextSong}>
-        <BsFillSkipEndFill className="h-7 w-7 cursor-pointer" />
+      <button className="absolute right-14 bottom-[7.7rem]">
+        <LuSkipForward
+          onClick={() => nextSong()}
+          className="w-6 h-6 hover:text-purple-400 active:text-purple-400"
+        />
       </button>
-    </ul>
+
+      <button className="absolute left-14 bottom-[7.7rem]">
+        <LuSkipBack
+          onClick={() => previousSong()}
+          className="w-6 h-6 hover:text-purple-400 active:text-purple-400"
+        />
+      </button>
+
+      <button className="absolute left-[7.3rem] bottom-[11.2rem]">
+        <PiPlusBold
+          onClick={() => increaseVolume()}
+          className="w-6 h-6 hover:text-purple-400 active:text-purple-400"
+        />
+      </button>
+
+      <button className="absolute left-[7.3rem] bottom-[4rem]">
+        <PiMinusBold
+          onClick={() => decreaseVolumeSong()}
+          className="w-6 h-6 hover:text-purple-400 active:text-purple-400"
+        />
+      </button>
+    </>
   );
 }
